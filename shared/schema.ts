@@ -4,15 +4,10 @@ import { z } from "zod";
 
 export const quotes = pgTable("quotes", {
   id: serial("id").primaryKey(),
-  fromCurrency: text("from_currency").notNull(),
-  toCurrency: text("to_currency").notNull(),
-  name: text("name").notNull(),
-  high: text("high").notNull(),
-  low: text("low").notNull(),
-  bidVariation: text("bid_variation").notNull(),
-  percentageChange: text("percentage_change").notNull(),
-  bidPrice: text("bid_price").notNull(),
-  askPrice: text("ask_price").notNull(),
+  symbol: text("symbol").notNull(),
+  price: text("price").notNull(),
+  change: text("change").notNull(),
+  changePercent: text("change_percent").notNull(),
   updatedAt: timestamp("updated_at").notNull(),
 });
 
@@ -23,19 +18,13 @@ export type Quote = typeof quotes.$inferSelect;
 
 // API Types
 export interface BrapiQuoteResponse {
-  currency: BrapiQuote[];
+  results: BrapiQuote[];
 }
 
 export interface BrapiQuote {
-  fromCurrency: string;
-  toCurrency: string;
-  name: string;
-  high: string;
-  low: string;
-  bidVariation: string;
-  percentageChange: string;
-  bidPrice: string;
-  askPrice: string;
-  updatedAtTimestamp: string;
-  updatedAtDate: string;
+  symbol: string;
+  regularMarketPrice: number;
+  regularMarketChange: number;
+  regularMarketChangePercent: number;
+  regularMarketTime: string;
 }

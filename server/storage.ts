@@ -3,7 +3,7 @@ import { quotes, type Quote, type InsertQuote } from "@shared/schema";
 export interface IStorage {
   saveQuote(quote: InsertQuote): Promise<Quote>;
   getLatestQuotes(): Promise<Quote[]>;
-  getQuotesByPair(fromCurrency: string, toCurrency: string): Promise<Quote[]>;
+  getQuotesBySymbol(symbol: string): Promise<Quote[]>;
 }
 
 export class MemStorage implements IStorage {
@@ -21,15 +21,12 @@ export class MemStorage implements IStorage {
       id: this.currentId++,
     };
     this.quotes.push(quote);
-    
-    // Keep only last 1000 quotes per pair to prevent memory issues
-    const pair = `${quote.fromCurrency}-${quote.toCurrency}`;
-    const pairQuotes = this.quotes.filter(q => 
-      `${q.fromCurrency}-${q.toCurrency}` === pair
-    );
-    
-    if (pairQuotes.length > 1000) {
-      const toRemove = pairQuotes[0];
+
+    // Manter apenas as últimas 1000 cotações por símbolo para evitar problemas de memória
+    const symbolQuotes = this.quotes.filter(q => q.symbol === quote.symbol);
+
+    if (symbolQuotes.length > 1000) {
+      const toRemove = symbolQuotes[0];
       this.quotes = this.quotes.filter(q => q.id !== toRemove.id);
     }
 
@@ -37,23 +34,16 @@ export class MemStorage implements IStorage {
   }
 
   async getLatestQuotes(): Promise<Quote[]> {
-    const pairs = new Set(
-      this.quotes.map(q => `${q.fromCurrency}-${q.toCurrency}`)
-    );
-    
-    return Array.from(pairs).map(pair => {
-      const [fromCurrency, toCurrency] = pair.split("-");
-      const pairQuotes = this.quotes.filter(
-        q => q.fromCurrency === fromCurrency && q.toCurrency === toCurrency
-      );
-      return pairQuotes[pairQuotes.length - 1];
+    const symbols = new Set(this.quotes.map(q => q.symbol));
+
+    return Array.from(symbols).map(symbol => {
+      const symbolQuotes = this.quotes.filter(q => q.symbol === symbol);
+      return symbolQuotes[symbolQuotes.length - 1];
     });
   }
 
-  async getQuotesByPair(fromCurrency: string, toCurrency: string): Promise<Quote[]> {
-    return this.quotes.filter(
-      q => q.fromCurrency === fromCurrency && q.toCurrency === toCurrency
-    );
+  async getQuotesBySymbol(symbol: string): Promise<Quote[]> {
+    return this.quotes.filter(q => q.symbol === symbol);
   }
 }
 

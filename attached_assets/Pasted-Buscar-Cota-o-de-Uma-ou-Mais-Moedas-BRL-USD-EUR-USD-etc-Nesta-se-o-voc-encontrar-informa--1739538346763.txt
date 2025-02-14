@@ -1,0 +1,108 @@
+Buscar Cotação de Uma ou Mais Moedas (BRL-USD, EUR-USD, etc)
+Nesta seção, você encontrará informações detalhadas sobre como buscar cotações de moedas por meio da API da brapi. Este endpoint é a porta de entrada para obter informações atualizadas sobre várias moedas, permitindo que você acompanhe os preços, variações, volume de negociação e muito mais.
+
+Endpoint
+O endpoint que você deve utilizar para buscar cotações de moedas é o seguinte:
+
+GET /api/v2/currency
+
+Parâmetros da Solicitação
+Para utilizar este endpoint, você precisa fornecer os seguintes parâmetros na solicitação:
+
+currency (obrigatório)
+O parâmetro "currency" é obrigatório e permite que você adicione uma ou mais moedas separadas por vírgula. Você pode consultar a lista de moedas disponíveis aqui.
+
+Exemplo de uso: ?currency=USD-BRL,EUR-USD
+
+Isso facilita a busca por informações específicas de moedas de seu interesse.
+
+token (obrigatório)
+O token de autenticação é obrigatório e exclusivo para cada usuário. Você pode obtê-lo em https://brapi.dev/dashboard. A autenticação é necessária para acessar os recursos da API e garantir a segurança das suas solicitações.
+
+Esse token pode ser passado como parâmetro de query ou como header Authorization: Bearer {token}.
+
+Esta flexibilidade na definição de parâmetros permite que você ajuste suas solicitações para atender a uma variedade de necessidades, desde a obtenção de cotações simples até a busca de informações fundamentais e dados detalhados sobre a moeda.
+
+Exemplo de Solicitação
+Para uma solicitação que busca as cotações de USD-BRL e EUR-USD, a solicitação ficaria da seguinte forma:
+
+const https = require('https');
+ 
+const options = {
+  method: 'GET',
+  hostname: 'brapi.dev',
+  path: '/api/v2/currency?currency=USD-BRL,EUR-USD&token=eJGEyu8vVHctULdVdHYzQd',
+};
+ 
+const req = https.request(options, (res) => {
+  let data = '';
+ 
+  res.on('data', (chunk) => {
+    data += chunk;
+  });
+ 
+  res.on('end', () => {
+    console.log(data);
+  });
+});
+ 
+req.end();
+
+Parâmetro	Valor
+currency	USD-BRL,EUR-USD
+token	eJGEyu8vVHctULdVdHYzQd
+Resposta da Solicitação
+200 OK
+A solicitação foi bem-sucedida.
+
+{
+  "currency": [
+    {
+      "fromCurrency": "USD",
+      "toCurrency": "BRL",
+      "name": "Dólar Americano/Real Brasileiro",
+      "high": "5.22",
+      "low": "5.162",
+      "bidVariation": "0.0454",
+      "percentageChange": "0.88",
+      "bidPrice": "5.2097",
+      "askPrice": "5.2127",
+      "updatedAtTimestamp": "1696601423",
+      "updatedAtDate": "2023-10-06 11:10:23"
+    },
+    {
+      "fromCurrency": "EUR",
+      "toCurrency": "USD",
+      "name": "Euro/Dólar Americano",
+      "high": "1.0568",
+      "low": "1.0482",
+      "bidVariation": "-0.0037",
+      "percentageChange": "-0.35",
+      "bidPrice": "1.051",
+      "askPrice": "1.0511",
+      "updatedAtTimestamp": "1696601456",
+      "updatedAtDate": "2023-10-06 11:10:56"
+    }
+  ]
+}
+400 Bad Request
+A solicitação foi malformada, inválida ou a moeda não existe.
+
+{
+  "error": true,
+  "message": "Algo deu errado ao buscar essa moeda"
+}
+417 Expectation Failed
+Não encontramos um ou mais parâmetros obrigatórios.
+
+{
+  "error": true,
+  "message": "Não foi possível encontrar o parâmetro obrigatório: 'currency', exemplo: https://brapi.dev/api/v2/currency?currency=USD-BRL"
+}
+401 Unauthorized
+O token de autenticação não foi informado ou é inválido.
+
+{
+  "error": true,
+  "message": "O seu token é inválido, por favor, verifique o seu token em brapi.dev/dashboard"
+}
