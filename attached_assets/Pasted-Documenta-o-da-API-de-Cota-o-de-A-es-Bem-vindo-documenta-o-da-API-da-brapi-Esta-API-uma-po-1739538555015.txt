@@ -1,0 +1,63 @@
+Documentação da API de Cotação de Ações
+Bem-vindo à documentação da API da brapi! Esta API é uma poderosa ferramenta que oferece acesso a informações atualizadas sobre cotações de ações, fundos imobiliários, moedas e criptomoedas. Além disso, ela fornece dados fundamentais e informações detalhadas sobre dividendos para ações listadas. Nossa API foi projetada para ser altamente personalizável, permitindo que você faça solicitações específicas para atender às suas necessidades exclusivas.
+
+Visão Geral da API
+Base URL
+A URL base para todas as solicitações é: https://brapi.dev/api
+
+Aqui, você encontrará uma visão abrangente de como utilizar nossa API para acessar informações financeiras valiosas. Continue lendo para descobrir como fazer solicitações, quais endpoints estão disponíveis e como interpretar as respostas.
+
+Autenticação na API
+A segurança dos dados é fundamental, e nossa API oferece autenticação para garantir que apenas usuários autorizados possam acessar os recursos. A autenticação pode ser feita de duas maneiras:
+
+Autenticação via Query Param
+Você pode autenticar suas solicitações incluindo um token como um parâmetro de consulta (query param) na URL da seguinte maneira:
+
+https://brapi.dev/api/{endpoint}?token={seu_token}
+Substitua {seu_token} pelo token de autenticação fornecido a você.
+
+Autenticação via Header
+Você também pode autenticar suas solicitações incluindo um token como um header
+
+Authorization: Bearer {seu_token}
+Substitua {seu_token} pelo token de autenticação fornecido a você.
+
+Onde Encontrar seu Token
+Para encontrar seu token de autenticação, acesse a Dashboard da brapi após o registro. Lá, você encontrará seu token exclusivo que pode ser usado para autenticar suas solicitações à API. Certifique-se de manter seu token seguro, pois ele é a chave para acessar os recursos da API.
+
+Como Fazer Solicitações
+A API da brapi é acessível por meio de solicitações HTTP simples. Você pode realizar solicitações GET para acessar uma variedade de informações financeiras. A estrutura básica de uma solicitação é a seguinte:
+
+https://brapi.dev/api/{endpoint}
+Substitua {endpoint} pelo endpoint específico que você deseja acessar. Por exemplo, para obter informações sobre a cotação de uma ação específica, use o endpoint quote da seguinte maneira:
+
+https://brapi.dev/api/quote/{ticker}?token={seu_token}
+Substitua {ticker} pelo símbolo da ação que você está interessado.
+
+Endpoints Disponíveis
+Nossa API oferece uma ampla gama de endpoints para atender às suas necessidades. Aqui estão alguns dos principais endpoints disponíveis:
+
+Ações, Fundos Imobiliários, Índices e BDRs
+GET /api/quote/{tickers} Ver mais
+GET /api/quote/list Ver mais
+GET /api/available Ver mais
+Criptomoedas
+GET /api/v2/crypto Ver mais
+GET /api/v2/crypto/available Ver mais
+Moedas
+GET /api/v2/currency Ver mais
+GET /api/v2/currency/available Ver mais
+Inflação
+GET /api/v2/inflation Ver mais
+GET /api/v2/inflation/available Ver mais
+Taxa Básica de Juros (SELIC)
+GET /api/v2/prime-rate Ver mais
+GET /api/v2/prime-rate/available Ver mais
+Você pode encontrar mais informações sobre cada endpoint no menu lateral à esquerda. Cada endpoint possui uma documentação detalhada que explica como utilizá-lo e quais parâmetros podem ser usados para personalizar suas solicitações.
+
+Como Interpretar as Respostas
+As respostas da API são retornadas em formato JSON, tornando-as fáceis de serem processadas por aplicativos e serviços. Cada endpoint possui uma estrutura de resposta específica, e a documentação detalhada de cada endpoint está disponível para ajudá-lo a entender e interpretar os dados retornados.
+
+Nossa API é uma ferramenta poderosa para desenvolvedores, investidores e entusiastas do mercado financeiro. Ela oferece acesso conveniente a uma ampla gama de informações financeiras para enriquecer seus aplicativos, serviços e análises.
+
+Se você tiver alguma dúvida ou precisar de assistência ao utilizar nossa API, não hesite em entrar em contato conosco. Estamos aqui para ajudar e garantir que você obtenha o máximo valor de nossa API de cotação de ações. Aproveite ao máximo a brapi!
