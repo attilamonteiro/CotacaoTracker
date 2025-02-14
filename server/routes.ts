@@ -21,7 +21,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/quotes/:fromCurrency/:toCurrency", async (req, res) => {
     try {
       const { fromCurrency, toCurrency } = req.params;
-      const quotes = await storage.getQuotesByPair(fromCurrency.toUpperCase(), toCurrency.toUpperCase());
+      const symbol = `${fromCurrency.toUpperCase()}-${toCurrency.toUpperCase()}`;
+      const quotes = await storage.getQuotesBySymbol(symbol);
       res.json({ quotes });
     } catch (error) {
       console.error(`[${new Date().toISOString()}] Error getting quotes by pair:`, error);
