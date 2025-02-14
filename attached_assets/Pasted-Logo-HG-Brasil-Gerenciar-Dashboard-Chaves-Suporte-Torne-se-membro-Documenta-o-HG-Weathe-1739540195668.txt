@@ -1,0 +1,432 @@
+Logo HG Brasil
+Gerenciar
+ Dashboard
+ Chaves
+ Suporte
+ Torne-se membro
+Documentação
+ HG Weather
+ HG Finance
+Como utilizar
+Bibliotecas
+ HG IP Location
+Seja membro
+Conheça as vantagens de ser membro da API!
+
+Português Português 
+Attila Monteiro de Abreu
+Usuário
+Buscar...
+HG Console
+HG Finance
+Documentação
+HG Finance Documentação
+API de dados financeiros
+Documentação
+Índice
+Introdução
+Autenticação e chave
+Obtendo contações de moedas, índices dos mercados, criptomoedas e taxas
+Obtendo o preço de ações ou FIIs listados no IBOVESPA
+Obtendo as ações com as maiores altas ou baixas no IBOVESPA
+Obtendo os dividendos de Ações, Fundos Imobiliários e BDRs NOVO!
+Índice Bovespa daily detalhado NOVO!
+Formatos de retorno
+Obter todos os dados em uma só requisição
+Obter somente cotações de moedas e bolsas
+Obter somente taxas CDI e SELIC
+Obtendo dados históricos
+Obtendo dados históricos de ações e FIIs NOVO!
+Personalizando a resposta
+Dicas de boas práticas
+Introdução
+O HG Finance é uma API que fornece dados da bolsa de valores brasileira B3, preço de ações, dividendos, indices, cotação do dólar e várias outras moedas.
+API fácil de implementar, desde 2009 no mercado, simples de implementar, com bibliotecas em PHP, Ruby e JavaScript. (em breve)
+
+Mesmo que sua aplicação não seja com essas linguagens, abaixo você pode conferir como integrar a API.
+Todos esses dados são retornados na mesma requisição de uma só vez, sendo esses dados:
+
+Em uma só requisição, você pode obter:
+- as posições dos principais índices como IBOVESPA, IFIX, NASDAQ, Dow Jones, CAC 40 e NIKKEI;
+- a cotação de diversas moedas em relação ao real como Dólar (USD), Euro (EUR), Libra (GBP), Peso (ARS), Dólar Canadense (CAD), Dólar Australiano (AUD), Iene do Japão (JPY), Renminbi da China (CNY) e Bitcoin (BTC);
+- cotação do bitcoin nas principais exchanges como Coinbase, Blockchain.info, BitStamp, FoxBit e Mercado Bitcoin;
+- as principais taxas de juros do Brasil como CDI e Selic.
+
+Tudo isso em uma só requisição.
+
+Recomendamos que sempre use sua chave, algumas informações só estão disponíveis com o uso da chave.
+
+
+Todas as requisições em como base o seguinte endpoint:
+
+Estrutura de dados
+Os dados referentes à consulta chegam no parâmetro results, você também pode conferir a autenticação de sua chave no parâmetro de retorno valid_key.
+
+currencies - cotação das moedas
+source - moeda base de cotação
+ISO da moeda
+name - nome da moeda
+buy - valor para compra
+sell - valor para venda (não disponível para algumas moedas)
+variation - variação em percentual referente à última hora útil anterior
+stocks - posições dos principais mercados
+índice
+name - nome do índice
+location - localização do mercado
+points - pontos (somente IBOVESPA)
+variation - variação em percentual referente à última hora útil anterior
+bitcoin - cotação nas principais corretoras
+corretora
+name - nome do índice
+format - array, moeda base de câmbio
+0 - ISO da moeda
+1 - idioma da moeda
+last - última posição
+buy - valor para compra (pode não estar disponível)
+sell - valor para venda (pode não estar disponível)
+variation - variação em percentual referente à última hora útil anterior
+taxes - taxas de juros do Brasil
+date - data de referência
+cdi - taxa CDI em percentual
+selic - taxa Selic em percentual
+daily_factor - fator diário
+selic_daily - taxa Selic diária em percentual
+cdi_daily - taxa CDI diária em percentual
+Você pode personalizar o resultado da consulta omitindo alguns dados veja como.
+
+Exemplo de resposta JSON
+ 
+Autenticação e chave
+A autenticação exigida para o uso da API é super simples.
+Basta você fazer o registro de sua chave aqui, e informar via parâmetro em suas consultas.
+
+Recomendamos que sempre utilize uma chave, seus limites de consulta serão maiores, e mais recursos serão habilitados.
+Você pode consultar os limites neste link.
+
+Sua chave deve ser informada em toda requisição, utilizando o parâmetro key.
+
+Obtendo o preço de Ações, BDRs e FIIs listados no IBOVESPA
+API gratuita para obter preço de ações na bolsa de valores BOVESPA!
+
+Novidade!
+Consulte também Fundos Imobiliários e BDRs!
+
+Com esse endpoint você pode obter o preço de uma ação listada no IBOVESPA através do símbolo desse título.
+Atenção! É necessário ser membro à partir do plano Member Premium para realizar essa consulta.
+Planos acima oferencem um maior número de títulos ao mesmo tempo, confira aqui nossos planos.
+
+Delay:
+API para fins informativos, os dados podem estar atrasados entre 15 minutos e 1 hora.
+É possível conferir o horário de atualização do dado no updated_at.
+
+Títulos disponíveis: veja a lista.
+
+Requer chave: sim
+Requer plano: sim, plano Member Premium ou superior
+
+Os dados são obtidos a partir do símbolo de uma empresa (veja a lista), através do parâmetro symbol.
+
+
+
+Nos planos Professional ou Enterprise é possível obter vários símbolos nas mesma consulta, separando por vírgula.
+
+Estrutura de dados
+Os dados referentes à consulta chegam no parâmetro results, você também pode conferir a autenticação de sua chave no parâmetro de retorno valid_key.
+
+kind - tipo do título
+stock - ação
+fii - fundo imobiliário
+symbol - símbolo / ticker da ação
+name - nome da empresa
+company_name - razão social
+document - documento / CNPJ da empresa
+description - descrição da empresa
+website - sita da empresa / relação com investidores
+sector - setor de atuação da empresa ou fundo
+financials
+equity - valor patrimonial (somente FIIs)
+quota_count - cotas emitidas (FIIs / ordinária / preferencial)
+equity_per_share - valor patrimonial por cota (somente FIIs)
+price_to_book_ratio - preço sobre valor patrimonial
+dividends - informações sobre dividendos
+yield_12m - percentual yield últ. 12 meses
+yield_12m_sum - soma últ. 12 meses em reais
+region - região de operação da bolsa
+currency - moeda base
+market_time - horário de negociação
+open - horário de abertura
+close - horário de fechamento
+timezone - fuso horário
+logo - logotipo da empresa
+small - URL para imagem em PNG 256 x 256
+big - URL para imagem em PNG 1.280 x 1.280
+market_cap - valor de mercado (em milhões)
+price - preço por ação
+change_percent - percentual de mudança do dia
+change_price - variação do dia em valor
+updated_at - última atualização
+Atenção! Exoneração de responsabilidade
+
+Exemplo de resposta JSON
+  
+Obtendo as ações com as maiores altas ou baixas no IBOVESPA
+Com esse endpoint você pode obter a lista de títulos que estão em maiores altas ou baixas.
+Atenção! É necessário ser membro à partir do plano Professional para realizar essa consulta.
+Planos acima oferencem um maior número de títulos ao mesmo tempo, confira aqui nossos planos.
+
+
+
+Delay:
+API para fins informativos, os dados podem estar atrasados entre 15 minutos e 1 hora.
+É possível conferir o horário de atualização do dado no updated_at.
+
+Títulos disponíveis: veja a lista.
+
+Requer chave: sim
+Requer plano: sim, plano Professional ou superior
+
+A lista é gerada apenas com os símbolo que fazem estão em nossa plataforma, veja a lista aqui.
+
+Para obter as maiores altas, informe no parâmetro symbol a opção get-high, exemplo:
+
+
+
+E para obter as maiores baixas, informe no parâmetro symbol a opção get-low, exemplo:
+
+
+
+A estrutura de dados é a mesma para o retorno de títulos do IBOVESPA.
+
+Atenção! Exoneração de responsabilidade
+
+Exemplo de resposta JSON
+  
+Obtendo os dividendos de Ações, Fundos Imobiliários e BDRs
+Novidade!
+Este endpoint acabou de sair do forno!
+
+Com esse endpoint você pode obter os dividendos de Ações, Fundos Imobiliários e BDRs listados no IBOVESPA através do símbolo desse título.
+Atenção! É necessário ser membro à partir do plano Professional para realizar essa consulta.
+Planos acima do Professional oferencem um maior número de títulos ao mesmo tempo, confira aqui nossos planos.
+
+
+
+Títulos disponíveis: veja a lista.
+
+Requer chave: sim
+Requer plano: sim, plano Professional ou superior
+
+Os dados são obtidos a partir do símbolo, através do parâmetro symbol.
+
+É possível obter vários símbolos nas mesma consulta, separando por vírgula.
+
+Estrutura de dados
+Os dados referentes à consulta chegam no parâmetro results, você também pode conferir a autenticação de sua chave no parâmetro de retorno valid_key.
+
+kind - tipo do título
+cash - pagamento em dinheiro
+stock - pagamento em cotas
+currency - moeda
+isin_code - padronização internacional na codificação de títulos financeiros
+label - referência
+amount - valor
+approved_in - aprovado em
+traded_until - para negócios até
+payment_date - data do pagamento (pode ser uma data futura)
+Atenção! Exoneração de responsabilidade
+
+Exemplo de resposta JSON
+ 
+Índice Bovespa daily detalhado
+Novidade!
+Este endpoint acabou de sair do forno!
+
+Com este método, você pode acessar o índice Bovespa diário detalhado em pontos.
+
+Requer chave: sim
+Requer plano: sim (plano Member - R$ 12,90 / mês)
+
+Por padrão, a API retorna os dados do pregão atual (se estiver acontecendo no momento), ou do último pregão.
+
+Estrutura de dados
+
+data - array com o retorno por minuto
+points - índice em pontos
+change - variação comparado ao fechamento anterior
+date - data no formato YYYYMMDDHHMMSS00
+Você também pode obter dados históricos do índice Bovespa com 3 filtros diferentes:
+
+
+Requer plano: sim (com acesso à dados históricos financeiros)
+
+
+Por intervalo de datas:
+start_date - data de inicio, string yyyy-mm-dd
+end_date - data de término, string yyyy-mm-dd
+
+Por data única:
+date - data de inicio, string yyyy-mm-dd
+
+Por número de dias atrás:
+days_ago - número de dias atrás, inteiro
+
+Somente um filtro desses 3 acima pode ser escolhido.
+Lembre-se que a data consultada deve estar dentro dos limites de dados históricos de finanças para seu plano.
+
+Exemplo de resposta
+ 
+Formatos de retorno
+Você pode escolher o formato de resposta da API através do parâmetro format na sua requisição.
+
+Formatos disponíveis
+json - retorno em JSON, padrão
+json-cors - retorno em JSON com headers CORS, chave exposta requerida
+php-serialize - serialização do PHP (antigo formato da API)
+debug - JSON visual para humanos, apenas para testes, não utilizar em produção
+Atenção! Lembre-se que para usar a API no JavaScript cliente do seu site, o formato deve ser o JSON-CORS, para que os headers de autorização sejam enviados.
+
+Esse formato requer uma chave válida e seu domínio, exatamente igual ao utilizado no site, deve ser cadastrado no momento da criação da chave.
+Aumente seus limites na API ou obtenha suporte
+ 
+Conheça as vantagens de ser membro da API 
+Sendo assinante, além de ajudar a manter o serviço para a comunidade, você terá acesso ao nosso suporte, maiores limites de consulta e recursos exclusivos.
+
+Chamada para API
+Obter todos os dados em uma só requisição
+Com este método, todos os dados são retornados em uma só requisição.
+
+Dados retornados:
+
+Câmbio das moedas: Dólar USD, Euro EUR, Libra (GBP), Peso (ARS) e Bitcoin (BTC) para Real (BRL);
+Valores de exchanges de Bitcoin (BTC) como Coinbase, Blockchain.info, BitStamp, FoxBit e Mercado Bitcoin;
+Variação dos índices: IBOVESPA, IFIX, NASDAQ, Dow Jones, CAC 40 e NIKKEI;
+Taxas brasileiras: CDI, SELIC e fator diário.
+
+Requer chave: sim, para que todos os dados sejam exibidos
+
+Obter somente cotações de moedas e bolsas
+Com este método, apenas as cotações de moedas e bolsa de valores são retornados.
+
+Dados retornados:
+
+Câmbio das moedas: Dólar (USD), Euro (EUR), Libra (GBP), Peso (ARS) e Bitcoin (BTC) para Real (BRL);
+Valores de exchanges de Bitcoin (BTC) como Coinbase, Blockchain.info, BitStamp, FoxBit e Mercado Bitcoin;
+Variação das bolsas de valores: IBOVESPA, NASDAQ, CAC 40 e NIKKEI.
+
+Requer chave: sim, para que todos os dados sejam exibidos
+
+Obter somente taxas CDI e SELIC
+Com este método, apenas as taxas de juros, CDI e Selic são retornadas.
+
+Dados retornados:
+
+Taxas brasileiras: CDI, SELIC e fator diário.
+
+Requer chave: sim
+
+Obtendo dados históricos
+Com este método, você pode acessar dados históricos registrados pela API.
+Esse método necessita da contratação de um plano que tenha suporte à dados históricos.
+
+
+Requer chave: sim
+Requer plano: sim (com suporte à dados históricos)
+
+Os dados históricos são obtidos a partir de uma data passada.
+
+
+
+Você pode escolher a data por 3 tipos de filtros diferentes:
+Por intervalo de datas:
+start_date - data de inicio, string yyyy-mm-dd
+end_date - data de término, string yyyy-mm-dd
+
+Por data única:
+date - data de inicio, string yyyy-mm-dd
+
+Por número de dias atrás:
+days_ago - número de dias atrás, inteiro
+
+Somente um filtro desses 3 acima pode ser escolhido.
+Lembre-se que a data consultada deve estar dentro dos limites de dados históricos de finanças para seu plano.
+
+Juntamente com uma das datas acima, você pode:
+
+Obter todos os dados, ou somente um usando o filtro mode:
+mode - string, disponíveis: all, currencies, stocks, bitcoin, taxes
+
+Somente um filtro acima pode ser utilizado.
+
+Exemplo de resposta
+ 
+
+O sistema obtem os dados e faz o cálculo diário para cada retorno, a fim de obter o primeiro valor, último, maior, menor e média.
+
+Obtendo dados históricos de Ações e Fundos Imobiliários
+Novidade!
+Este endpoint acabou de sair do forno!
+
+Com este método, você pode acessar dados históricos registrados pela API de Ações e Fundos Imobiliários.
+Esse método necessita da contratação de um plano que tenha suporte à dados históricos de finanças.
+
+
+Requer chave: sim
+Requer plano: sim (com suporte à dados históricos)
+
+Os dados históricos são obtidos a partir de uma data passada.
+
+
+
+Para buscar por ações ou fundos imobiliários, você pode utilizar as mesmas formas de busca da API:
+Somente um é necessário.
+
+symbols - um ou mais ticker de empresa ou FII * - veja a lista de tickers disponíveis
+* o número máximo de tickers em uma mesma consulta varia de acordo com o plano contratado
+
+Você pode escolher a data por 3 tipos de filtros diferentes:
+Por intervalo de datas:
+start_date - data de inicio, string yyyy-mm-dd
+end_date - data de término, string yyyy-mm-dd
+
+Por data única:
+date - data de inicio, string yyyy-mm-dd
+
+Por número de dias atrás:
+days_ago - número de dias atrás, inteiro
+
+Somente um filtro desses 3 acima pode ser escolhido.
+Lembre-se que a data consultada deve estar dentro dos limites de dados históricos de finanças para seu plano.
+
+Exemplo de resposta
+ 
+Personalizando a resposta
+Algumas aplicações, como IoT, tem menos poder em processar e parsear dados. Por isso você pode em sua requisição, solicitar que alguns dados sejam omitidos, para que apenas os dados que você necessite sejam exibidos.
+
+Você pode escolher quais campos são retornados, limitar arrays ou ignorar os retornos de status e chave. Este recurso é compatível apenas com o formato JSON e requer o uso de sua chave de API.
+
+fields - neste parâmetro você configura o recurso e escolhe quais campos manter, dados válidos abaixo, você pode colocar mais de um, separados por vírgula
+only_results - remove os dados de status, cache e chave, enviando apenas os resultados
+nome-do-campo - nome do campo desejado
+array_limit - inteiro limitando o número de itens em arrays do retorno
+Qualquer forma de busca pode ser utilizada junto a este método.
+
+Exemplo de resposta
+ 
+Dicas de boas práticas
+Faça cache
+Para que seus limites de consulta sejam utilizados da melhor forma possível, faça cache de suas requisições.
+
+Cada pageview do seu site ou aplicação, não necessita necessáriamente de uma nova consulta ao HG Finance.
+
+Por exemplo, se seu usuário acabou de entrar, faça uma consulta (mesmo que seja no lado do cliente), mas assim que o dado for obtido, salve em um armazenamento local ou temporário para que na próxima página que seu usuário entrar, essa consulta não seja necessária.
+
+Utilize rotinas
+Se sua aplicação permitir, utilize rotinas ou threads para obter os dados. Isso pode melhorar o tempo final de resposta do seu serviço que utiliza a API.
+
+Exoneração de responsabilidade
+API para fins informativos. Não garantimos a precisão dos dados fornecidos pela API ou contidos nesta página, uma vez que devem ser utilizados apenas para efeitos informativos. Trabalhamos pela estabilidade e precisão dos dados, porém, os dados podem estar atrasados ou errados "no estado em que se encontram", confirme todos os dados antes de efetuar qualquer ação que possa ser afetada por estes valores, assim como demais endpoints da API.
+
+Qualquer dúvida verifique nossos termos de uso ou entre em contato.
+
+2009 - 2024 © HG Brasil
+Tecnologia Formaweb Suporte

@@ -1,12 +1,10 @@
 import axios from "axios";
 import { config } from "../config";
-import { type BrapiQuoteResponse, type InsertQuote } from "@shared/schema";
+import { type HGBrasilResponse, type InsertQuote, type Currency } from "@shared/schema";
 import { storage } from "../storage";
 
 export class CurrencyService {
-  private readonly axiosInstance = axios.create({
-    baseURL: config.apiBaseUrl,
-  });
+  private readonly baseUrl = config.apiBaseUrl;
 
   private async waitAndRetry(delayMs: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, delayMs));
@@ -14,32 +12,33 @@ export class CurrencyService {
 
   async fetchQuotes(retryCount = 0): Promise<void> {
     try {
-      console.log(`[${new Date().toISOString()}] Buscando cotações: ${config.currencyPairs}`);
+      console.log(`[${new Date().toISOString()}] Buscando cotações para: ${config.currencyCodes.join(", ")}`);
 
-      const response = await this.axiosInstance.get<BrapiQuoteResponse>(`/currency`, {
-        params: {
-          currency: config.currencyPairs,
-          token: config.brapiToken,
-        },
-      });
+      const url = `${this.baseUrl}?key=${config.hgBrasilToken}`;
+      const response = await axios.get<HGBrasilResponse>(url);
 
-      if (!response.data.currency || response.data.currency.length === 0) {
+      if (!response.data.results?.currencies) {
         console.log(`[${new Date().toISOString()}] Nenhuma cotação recebida da API`);
         return;
       }
 
-      // Salvar todas as cotações recebidas
-      for (const quote of response.data.currency) {
+      const currencies = response.data.results.currencies;
+
+      // Para cada moeda que queremos monitorar
+      for (const code of config.currencyCodes) {
+        const currency = currencies[code] as Currency;
+        if (!currency || typeof currency === 'string') continue;
+
         const insertQuote: InsertQuote = {
-          symbol: `${quote.fromCurrency}-${quote.toCurrency}`,
-          price: quote.bidPrice,
-          change: quote.bidVariation,
-          changePercent: quote.percentageChange,
-          updatedAt: new Date(quote.updatedAtDate),
+          symbol: `${code}-BRL`,
+          price: currency.buy.toString(),
+          change: (currency.buy - (currency.buy / (1 + currency.variation / 100))).toString(),
+          changePercent: currency.variation.toString(),
+          updatedAt: new Date(),
         };
 
         await storage.saveQuote(insertQuote);
-        console.log(`[${new Date().toISOString()}] Cotação salva para ${quote.fromCurrency}-${quote.toCurrency}: ${quote.bidPrice}`);
+        console.log(`[${new Date().toISOString()}] Cotação salva para ${code}-BRL: ${currency.buy}`);
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {

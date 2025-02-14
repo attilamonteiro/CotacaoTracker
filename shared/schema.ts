@@ -17,20 +17,26 @@ export type InsertQuote = z.infer<typeof insertQuoteSchema>;
 export type Quote = typeof quotes.$inferSelect;
 
 // API Types
-export interface BrapiQuoteResponse {
-  currency: BrapiQuote[];
+export interface HGBrasilResponse {
+  by: string;
+  valid_key: boolean;
+  results: {
+    currencies: {
+      source: string;
+      [key: string]: {
+        name: string;
+        buy: number;
+        sell: number;
+        variation: number;
+      } | string;
+    };
+  };
 }
 
-export interface BrapiQuote {
-  fromCurrency: string;
-  toCurrency: string;
+export interface Currency {
+  code: string;
   name: string;
-  high: string;
-  low: string;
-  bidVariation: string;
-  percentageChange: string;
-  bidPrice: string;
-  askPrice: string;
-  updatedAtTimestamp: string;
-  updatedAtDate: string;
+  buy: number;
+  sell: number;
+  variation: number;
 }
