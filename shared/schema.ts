@@ -7,12 +7,12 @@ export const quotes = pgTable("quotes", {
   fromCurrency: text("from_currency").notNull(),
   toCurrency: text("to_currency").notNull(),
   name: text("name").notNull(),
-  high: numeric("high").notNull(),
-  low: numeric("low").notNull(),
-  bidVariation: numeric("bid_variation").notNull(),
-  percentageChange: numeric("percentage_change").notNull(),
-  bidPrice: numeric("bid_price").notNull(),
-  askPrice: numeric("ask_price").notNull(),
+  high: text("high").notNull(),
+  low: text("low").notNull(),
+  bidVariation: text("bid_variation").notNull(),
+  percentageChange: text("percentage_change").notNull(),
+  bidPrice: text("bid_price").notNull(),
+  askPrice: text("ask_price").notNull(),
   updatedAt: timestamp("updated_at").notNull(),
 });
 
