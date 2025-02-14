@@ -18,13 +18,19 @@ export type Quote = typeof quotes.$inferSelect;
 
 // API Types
 export interface BrapiQuoteResponse {
-  results: BrapiQuote[];
+  currency: BrapiQuote[];
 }
 
 export interface BrapiQuote {
-  symbol: string;
-  regularMarketPrice: number;
-  regularMarketChange: number;
-  regularMarketChangePercent: number;
-  regularMarketTime: string;
+  fromCurrency: string;
+  toCurrency: string;
+  name: string;
+  high: string;
+  low: string;
+  bidVariation: string;
+  percentageChange: string;
+  bidPrice: string;
+  askPrice: string;
+  updatedAtTimestamp: string;
+  updatedAtDate: string;
 }

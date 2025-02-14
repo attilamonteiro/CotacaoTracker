@@ -16,28 +16,29 @@ export class CurrencyService {
     try {
       console.log(`[${new Date().toISOString()}] Buscando cotação do ${config.currencySymbol}`);
 
-      const response = await this.axiosInstance.get<BrapiQuoteResponse>(`/quote/${config.currencySymbol}`, {
+      const response = await this.axiosInstance.get<BrapiQuoteResponse>("/currency", {
         params: {
+          currency: config.currencySymbol,
           token: config.brapiToken,
         },
       });
 
-      if (!response.data.results || response.data.results.length === 0) {
+      if (!response.data.currency || response.data.currency.length === 0) {
         console.log(`[${new Date().toISOString()}] Nenhuma cotação recebida da API`);
         return;
       }
 
-      const quote = response.data.results[0];
+      const quote = response.data.currency[0];
       const insertQuote: InsertQuote = {
-        symbol: quote.symbol,
-        price: quote.regularMarketPrice.toString(),
-        change: quote.regularMarketChange.toString(),
-        changePercent: quote.regularMarketChangePercent.toString(),
-        updatedAt: new Date(quote.regularMarketTime),
+        symbol: `${quote.fromCurrency}-${quote.toCurrency}`,
+        price: quote.bidPrice,
+        change: quote.bidVariation,
+        changePercent: quote.percentageChange,
+        updatedAt: new Date(quote.updatedAtDate),
       };
 
       await storage.saveQuote(insertQuote);
-      console.log(`[${new Date().toISOString()}] Cotação salva para ${quote.symbol}: ${quote.regularMarketPrice}`);
+      console.log(`[${new Date().toISOString()}] Cotação salva para ${quote.fromCurrency}-${quote.toCurrency}: ${quote.bidPrice}`);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const responseData = error.response?.data;
